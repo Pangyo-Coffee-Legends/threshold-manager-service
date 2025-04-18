@@ -1,20 +1,23 @@
 package com.nhnacademy.thresholdmanagerservice.threshold.dto;
 
 /**
- * 임계값(Threshold)에 대한 응답 DTO입니다.
+ * 임계값(Threshold)을 등록하기 위한 요청 DTO입니다.
  * <p>
- * 클라이언트에게 임계값 관련 데이터를 응답할 때 사용됩니다. 이 객체는 임계값의 고유 ID,
- * 메트릭 이름, limit 값, 비교 연산자(operator) 등과 같은 정보를 포함합니다.
+ * 클라이언트로부터 전달받은 metric, limitValue, operator 등의 정보를 담아
+ * Threshold 도메인 객체 생성을 위한 데이터로 사용됩니다.
  * </p>
+ *
+ * <p>주요 필드 예시:</p>
+ * <ul>
+ *     <li>metric - 모니터링 지표 이름 (측정 항목)</li>
+ *     <li>limitValue - 임계값 숫자</li>
+ *     <li>operator - 비교 연산자 (>, <, >= 등)</li>
+ *     <li>enabled - 임계값 활성화 여부</li>
+ * </ul>
  *
  * @author 강승우
  */
-public class ThresholdResponse {
-
-    /**
-     * 임계값의 고유 ID
-     */
-    private Long thresholdId;
+public class ThresholdRegisterRequest {
 
     /**
      * 측정 항목. 어떤 것을 감시할지를 뜻한다.
@@ -23,8 +26,7 @@ public class ThresholdResponse {
     private String metric;
 
     /**
-     * 임계값으로 설정된 수치
-     * ex) CPU 사용률의 제한 값
+     * 기준이 되는 임계값
      */
     private Double limitValue;
 
@@ -49,32 +51,14 @@ public class ThresholdResponse {
      */
     private String createdBy;
 
-    /**
-     * 기초 생성자
-     */
-    protected ThresholdResponse() {}
+    private ThresholdRegisterRequest() {}
 
-    /**
-     * ThresholdResponse 응답 객체를 생성합니다.
-     *
-     * @param thresholdId 임계값(Threshold)의 고유 ID
-     * @param metric 임계값이 적용되는 메트릭 이름 (예: CPU 사용률, 메모리 등)
-     * @param limitValue 임계값으로 설정된 수치
-     * @param operator 비교 연산자 (예: GREATER_THAN, LESS_THAN 등)
-     * @param enabled 해당 임계값 설정의 활성화 여부
-     * @param createdBy 임계값을 생성한 사용자 이름
-     */
-    public ThresholdResponse(Long thresholdId, String metric, Double limitValue, String operator, boolean enabled, String createdBy) {
-        this.thresholdId = thresholdId;
+    public ThresholdRegisterRequest(String metric, Double limitValue, String operator, boolean enabled, String createdBy) {
         this.metric = metric;
         this.limitValue = limitValue;
         this.operator = operator;
         this.enabled = enabled;
         this.createdBy = createdBy;
-    }
-
-    public Long getThresholdId() {
-        return thresholdId;
     }
 
     public String getMetric() {
@@ -99,9 +83,8 @@ public class ThresholdResponse {
 
     @Override
     public String toString() {
-        return "ThresholdResponse{" +
-                "thresholdId=" + thresholdId +
-                ", metric='" + metric + '\'' +
+        return "ThresholdRegisterRequest{" +
+                "metric='" + metric + '\'' +
                 ", limitValue=" + limitValue +
                 ", operator='" + operator + '\'' +
                 ", enabled=" + enabled +
